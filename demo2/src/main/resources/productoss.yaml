@@ -1,0 +1,161 @@
+openapi: 3.0.1
+info:
+  title: prueba tecnica
+  description: API para productos
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Localhost server
+
+paths:
+  /v1/productos:
+    get:
+      parameters:
+        - name: username
+          in: header
+          description: nombre de usuario
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: header
+          description: contraseña
+          required: true
+          schema:
+            type: string
+      description: Retorna todos los productos
+      operationId: getProducts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductoType"
+    post:
+      parameters:
+        - name: username
+          in: header
+          description: nombre de usuario
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: header
+          description: contraseña
+          required: true
+          schema:
+            type: string
+      description: Crea un nuevo producto
+      operationId: createProduct
+      requestBody:
+        description: ProductoType a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductoType"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductoType"
+  /v1/productos/{id}:
+    get:
+      description: Retorna un producto por ID
+      operationId: getProductById
+      parameters:
+        - name: id
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductoType"
+    put:
+      description: Actualiza un producto existente
+      operationId: updateProduct
+      parameters:
+        - name: id
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: ProductoType a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductoType"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductoType"
+    delete:
+      description: Elimina un producto existente
+      operationId: deleteProduct
+      parameters:
+        - name: id
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: No Content
+
+
+components:
+  schemas:
+    ProductoType:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+        descripcion:
+          type: string
+        precio:
+          type: integer
+          format: int32
+        stock:
+          type: integer
+          format: int32
+      required:
+        - nombre
+        - precio
+        - stock
+    UserType:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+      required:
+        - username
+        - password
